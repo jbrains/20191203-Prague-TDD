@@ -46,6 +46,12 @@ public class AddFractionsTest {
         Assertions.assertEquals(new Fraction(1), sum);
     }
 
+    @Test
+    void denominatorsWithACommonFactorButWhereNeitherIsAMultipleOfTheOther() throws Exception {
+        Fraction sum = new Fraction(5, 6).plus(new Fraction(2, 9));
+        Assertions.assertEquals(new Fraction(19, 18), sum);
+    }
+
     public static class Fraction {
         private int numerator;
         private int denominator;
