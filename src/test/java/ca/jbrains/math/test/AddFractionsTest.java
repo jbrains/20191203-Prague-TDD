@@ -75,7 +75,7 @@ public class AddFractionsTest {
         public boolean equals(Object other) {
             if (other instanceof Fraction) {
                 Fraction that = (Fraction) other;
-                return this.numerator * that.denominator == this.numerator * that.denominator;
+                return this.numerator * that.denominator == that.numerator * this.denominator;
             }
             else {
                 return false;
