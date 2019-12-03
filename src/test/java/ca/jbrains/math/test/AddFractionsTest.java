@@ -64,14 +64,6 @@ public class AddFractionsTest {
                         this.denominator * that.denominator);
         }
 
-        public int getNumerator() {
-            return numerator;
-        }
-
-        public int getDenominator() {
-            return denominator;
-        }
-
         @Override
         public boolean equals(Object other) {
             if (other instanceof Fraction) {
@@ -81,6 +73,16 @@ public class AddFractionsTest {
             else {
                 return false;
             }
+        }
+
+        @Override
+        public int hashCode() {
+            return -762;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%d/%d", numerator, denominator);
         }
     }
 }
