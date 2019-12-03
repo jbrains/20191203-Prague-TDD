@@ -14,6 +14,16 @@ public class SellOneItemTest {
         Assertions.assertEquals("234,90 Kč", display.getText());
     }
 
+    @Test
+    void anotherProductFound() throws Exception {
+        final Display display = new Display();
+        final Sale sale = new Sale(display);
+
+        sale.onBarcode("23456");
+
+        Assertions.assertEquals("478,52 Kč", display.getText());
+    }
+
     public static class Sale {
         private Display display;
 
@@ -22,9 +32,13 @@ public class SellOneItemTest {
         }
 
         public void onBarcode(String barcode) {
-            display.setText("234,90 Kč");
+            if ("12345".equals(barcode))
+                display.setText("234,90 Kč");
+            else
+                display.setText("478,52 Kč");
         }
     }
+
     public static class Display {
         private String text;
 
