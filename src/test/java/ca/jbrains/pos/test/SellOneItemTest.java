@@ -54,12 +54,14 @@ public class SellOneItemTest {
         public void onBarcode(String barcode) {
             if ("".equals(barcode))
                 display.setText("Scanning error: empty barcode");
-            else if ("12345".equals(barcode))
-                display.setText("234,90 Kč");
-            else if ("23456".equals(barcode))
-                display.setText("478,52 Kč");
-            else
-                display.setText(String.format("Product not found: %s", barcode));
+            else {
+                if ("12345".equals(barcode))
+                    display.setText("234,90 Kč");
+                else if ("23456".equals(barcode))
+                    display.setText("478,52 Kč");
+                else
+                    display.setText(String.format("Product not found: %s", barcode));
+            }
         }
     }
 
