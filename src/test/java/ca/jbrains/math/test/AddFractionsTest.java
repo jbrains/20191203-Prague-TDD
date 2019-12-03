@@ -7,43 +7,37 @@ public class AddFractionsTest {
     @Test
     void zeroPlusZero() throws Exception {
         Fraction sum = new Fraction(0).plus(new Fraction(0));
-        Assertions.assertEquals(0, sum.getNumerator());
-        Assertions.assertEquals(1, sum.getDenominator());
+        Assertions.assertEquals(new Fraction(0), sum);
     }
 
     @Test
     void notZeroPlusZero() throws Exception {
         Fraction sum = new Fraction(5).plus(new Fraction(0));
-        Assertions.assertEquals(5, sum.getNumerator());
-        Assertions.assertEquals(1, sum.getDenominator());
+        Assertions.assertEquals(new Fraction(5), sum);
     }
 
     @Test
     void zeroPlusNotZero() throws Exception {
         Fraction sum = new Fraction(0).plus(new Fraction(8));
-        Assertions.assertEquals(8, sum.getNumerator());
-        Assertions.assertEquals(1, sum.getDenominator());
+        Assertions.assertEquals(new Fraction(8), sum);
     }
 
     @Test
     void notZeroPlusNotZero() throws Exception {
         Fraction sum = new Fraction(10).plus(new Fraction(4));
-        Assertions.assertEquals(14, sum.getNumerator());
-        Assertions.assertEquals(1, sum.getDenominator());
+        Assertions.assertEquals(new Fraction(14), sum);
     }
 
     @Test
     void sameDenominators() throws Exception {
         Fraction sum = new Fraction(1, 5).plus(new Fraction(3, 5));
-        Assertions.assertEquals(4, sum.getNumerator());
-        Assertions.assertEquals(5, sum.getDenominator());
+        Assertions.assertEquals(new Fraction(4, 5), sum);
     }
 
     @Test
     void relativelyPrimeDenominators() throws Exception {
         Fraction sum = new Fraction(2, 7).plus(new Fraction(4, 5));
-        Assertions.assertEquals(38, sum.getNumerator());
-        Assertions.assertEquals(35, sum.getDenominator());
+        Assertions.assertEquals(new Fraction(38, 35), sum);
     }
 
     public static class Fraction {
@@ -76,6 +70,17 @@ public class AddFractionsTest {
 
         public int getDenominator() {
             return denominator;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other instanceof Fraction) {
+                Fraction that = (Fraction) other;
+                return this.numerator * that.denominator == this.numerator * that.denominator;
+            }
+            else {
+                return false;
+            }
         }
     }
 }
