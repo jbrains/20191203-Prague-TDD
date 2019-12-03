@@ -40,6 +40,12 @@ public class AddFractionsTest {
         Assertions.assertEquals(new Fraction(38, 35), sum);
     }
 
+    @Test
+    void nonIntegerFractionsAddToAnInteger() throws Exception {
+        Fraction sum = new Fraction(1, 4).plus(new Fraction(3, 4));
+        Assertions.assertEquals(new Fraction(1), sum);
+    }
+
     public static class Fraction {
         private int numerator;
         private int denominator;
