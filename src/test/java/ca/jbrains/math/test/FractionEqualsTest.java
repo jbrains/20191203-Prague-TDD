@@ -5,23 +5,23 @@ import org.junit.jupiter.api.Assertions;
 
 public class FractionEqualsTest {
     @Data
-    Iterable<Tuple.Tuple2<AddFractionsTest.Fraction, AddFractionsTest.Fraction>> unequalExamples() {
+    Iterable<Tuple.Tuple2<Fraction, Fraction>> unequalExamples() {
         return Table.of(
                 Tuple.of(
-                        new AddFractionsTest.Fraction(1, 2),
-                        new AddFractionsTest.Fraction(1, 3)),
+                        new Fraction(1, 2),
+                        new Fraction(1, 3)),
                 Tuple.of(
-                        new AddFractionsTest.Fraction(3, 7),
-                        new AddFractionsTest.Fraction(4, 7)),
+                        new Fraction(3, 7),
+                        new Fraction(4, 7)),
                 Tuple.of(
-                        new AddFractionsTest.Fraction(5, 7),
-                        new AddFractionsTest.Fraction(26, 35))
+                        new Fraction(5, 7),
+                        new Fraction(26, 35))
         );
     }
 
     @Property
     @FromData("unequalExamples")
-    void shouldNotBeEqual(@ForAll AddFractionsTest.Fraction first, @ForAll AddFractionsTest.Fraction second) {
+    void shouldNotBeEqual(@ForAll Fraction first, @ForAll Fraction second) {
         Assertions.assertNotEquals(first, second);
     }
 }
