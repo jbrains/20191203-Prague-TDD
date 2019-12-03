@@ -9,7 +9,13 @@ public class FractionEqualsTest {
         return Table.of(
                 Tuple.of(
                         new AddFractionsTest.Fraction(1, 2),
-                        new AddFractionsTest.Fraction(1, 3))
+                        new AddFractionsTest.Fraction(1, 3)),
+                Tuple.of(
+                        new AddFractionsTest.Fraction(3, 7),
+                        new AddFractionsTest.Fraction(4, 7)),
+                Tuple.of(
+                        new AddFractionsTest.Fraction(5, 7),
+                        new AddFractionsTest.Fraction(26, 35))
         );
     }
 
