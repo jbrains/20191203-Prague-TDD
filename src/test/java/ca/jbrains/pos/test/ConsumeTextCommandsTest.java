@@ -20,11 +20,7 @@ public class ConsumeTextCommandsTest {
 
     @Test
     void oneCommand() throws Exception {
-        consumeText(
-                command -> this.commandsReceived.add(command),
-                new StringReader(unlines(Arrays.asList("::command::"))));
-
-        Assertions.assertEquals(Arrays.asList("::command::"), commandsReceived, "Wrong commands received.");
+        checkLinesAreConsumedAsCommands(Arrays.asList("::command::"));
     }
 
     @Test
@@ -38,14 +34,15 @@ public class ConsumeTextCommandsTest {
 
     @Test
     void severalCommands() throws Exception {
-        consumeText(
-                command -> ConsumeTextCommandsTest.this.commandsReceived.add(command),
-                new StringReader(unlines(Arrays.asList("::command 1::", "::command 2::", "::command 3::"))));
+        checkLinesAreConsumedAsCommands(Arrays.asList("::command 1::", "::command 2::", "::command 3::"));
+    }
 
-        Assertions.assertEquals(
-                Arrays.asList("::command 1::", "::command 2::", "::command 3::"),
-                commandsReceived,
-                "Wrong commands received.");
+    private void checkLinesAreConsumedAsCommands(List<String> lines) throws IOException {
+        consumeText(
+                command -> this.commandsReceived.add(command),
+                new StringReader(unlines(lines)));
+
+        Assertions.assertEquals(lines, commandsReceived, "Wrong commands received.");
     }
 
     private void consumeText(Consumer<String> handleCommand, Reader commandSource) throws IOException {
