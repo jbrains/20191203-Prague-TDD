@@ -2,6 +2,7 @@ package ca.jbrains.pos.test;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,16 +39,32 @@ public class ConsumeTextCommandsTest {
                 Arrays.asList("::command 1::", "::command 2::", "::command 3::"));
     }
 
+    @Test
+    void canonicalizeLines() throws Exception {
+        final CanonicalizeLines canonicalizeLines = Mockito.mock(CanonicalizeLines.class);
+
+        consumeText(ignored -> {}, new StringReader("::anything not empty::"), canonicalizeLines);
+
+        // Just try to canonicalize the lines!
+        // SMELL This expectation seems silly!
+        Mockito.verify(canonicalizeLines).canonicalizeLines(Mockito.any());
+    }
+
     private void checkLinesConsumedAsCommands(List<String> lines, List<String> expectedCommands) throws IOException {
+        final CanonicalizeLines canonicalizeLines = Mockito.mock(CanonicalizeLines.class);
+        // SMELL A very complicated way to say "don't change the incoming lines".
+        Mockito.when(canonicalizeLines.canonicalizeLines(Mockito.any())).thenReturn(lines.stream());
+
         consumeText(
                 command -> this.commandsReceived.add(command),
-                new StringReader(unlines(lines)));
+                new StringReader(unlines(lines)),
+                canonicalizeLines);
 
         Assertions.assertEquals(expectedCommands, commandsReceived, "Wrong commands received.");
     }
 
-    private void consumeText(Consumer<String> handleCommand, Reader commandSource) throws IOException {
-        new CanonicalizeLinesByRemovingWhitespace().canonicalizeLines(new BufferedReader(commandSource).lines())
+    private void consumeText(Consumer<String> handleCommand, Reader commandSource, CanonicalizeLines canonicalizeLines) throws IOException {
+        canonicalizeLines.canonicalizeLines(new BufferedReader(commandSource).lines())
                 .forEach(handleCommand::accept);
     }
 
