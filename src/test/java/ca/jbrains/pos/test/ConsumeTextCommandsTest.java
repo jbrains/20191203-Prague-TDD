@@ -16,19 +16,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ConsumeTextCommandsTest {
-    private boolean commandReceived = false;
     private List<String> commandsReceived = new ArrayList<>();
 
     @Test
     void oneCommand() throws Exception {
-        final Consumer<String> expectCommand = command -> {
-            Assertions.assertEquals("::command::", command);
-            ConsumeTextCommandsTest.this.commandReceived = true;
-        };
+        consumeText(
+                command -> this.commandsReceived.add(command),
+                new StringReader(unlines(Arrays.asList("::command::"))));
 
-        consumeText(expectCommand, new StringReader(unlines(Arrays.asList("::command::"))));
-
-        Assertions.assertEquals(true, commandReceived, "Command not received.");
+        Assertions.assertEquals(Arrays.asList("::command::"), commandsReceived, "Wrong commands received.");
     }
 
     @Test
