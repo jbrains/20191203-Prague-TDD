@@ -45,6 +45,13 @@ public class ConsumeTextCommandsTest {
                 Arrays.asList("::command 1::", "::command 2::", "::command 3::"));
     }
 
+    @Test
+    void severalCommandsSomeHaveExtraWhitespace() throws Exception {
+        checkLinesConsumedAsCommands(
+                Arrays.asList("    ::command 1::   ", "   \t\t   \r   ", "::command 2::     ", "", "", "\t::command 3::\f"),
+                Arrays.asList("::command 1::", "::command 2::", "::command 3::"));
+    }
+
     private void checkLinesConsumedAsCommands(List<String> lines, List<String> expectedCommands) throws IOException {
         consumeText(
                 command -> this.commandsReceived.add(command),
@@ -55,6 +62,7 @@ public class ConsumeTextCommandsTest {
 
     private void consumeText(Consumer<String> handleCommand, Reader commandSource) throws IOException {
         new BufferedReader(commandSource).lines()
+                .map(String::trim)
                 .filter(line -> !line.isEmpty())
                 .forEach(handleCommand::accept);
     }
