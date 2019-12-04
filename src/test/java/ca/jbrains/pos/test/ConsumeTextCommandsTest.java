@@ -3,8 +3,11 @@ package ca.jbrains.pos.test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.Buffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
@@ -25,8 +28,8 @@ public class ConsumeTextCommandsTest {
         Assertions.assertEquals(true, commandReceived, "Command not received.");
     }
 
-    private void consumeText(Consumer<String> handleCommand, Reader commandSource) {
-        handleCommand.accept("::command::");
+    private void consumeText(Consumer<String> handleCommand, Reader commandSource) throws IOException {
+        handleCommand.accept(new BufferedReader(commandSource).readLine());
     }
 
     // REFACTOR Move to a generic text-processing library
