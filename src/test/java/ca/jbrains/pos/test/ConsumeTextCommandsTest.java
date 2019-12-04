@@ -30,8 +30,10 @@ public class ConsumeTextCommandsTest {
     @Test
     void noCommands() throws Exception {
         consumeText(
-                command -> Assertions.fail(String.format("Unexpected command received: [%s].", command)),
+                command -> this.commandsReceived.add(command),
                 new StringReader(unlines(Collections.emptyList())));
+
+        Assertions.assertEquals(Arrays.asList(), commandsReceived, "Wrong commands received.");
     }
 
     @Test
