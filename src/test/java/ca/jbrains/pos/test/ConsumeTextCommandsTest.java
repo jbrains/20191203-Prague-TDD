@@ -13,40 +13,50 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ConsumeTextCommandsTest {
     private List<String> commandsReceived = new ArrayList<>();
 
     @Test
     void oneCommand() throws Exception {
-        checkLinesAreConsumedAsCommands(Arrays.asList("::command::"));
+        checkLinesConsumedAsCommands(
+                Arrays.asList("::command::"),
+                Arrays.asList("::command::"));
     }
 
     @Test
     void noCommands() throws Exception {
-        consumeText(
-                command -> this.commandsReceived.add(command),
-                new StringReader(unlines(Collections.emptyList())));
-
-        Assertions.assertEquals(Arrays.asList(), commandsReceived, "Wrong commands received.");
+        checkLinesConsumedAsCommands(
+                Collections.emptyList(),
+                Collections.emptyList());
     }
 
     @Test
     void severalCommands() throws Exception {
-        checkLinesAreConsumedAsCommands(Arrays.asList("::command 1::", "::command 2::", "::command 3::"));
+        checkLinesConsumedAsCommands(
+                Arrays.asList("::command 1::", "::command 2::", "::command 3::"),
+                Arrays.asList("::command 1::", "::command 2::", "::command 3::"));
     }
 
-    private void checkLinesAreConsumedAsCommands(List<String> lines) throws IOException {
+    @Test
+    void severalCommandsSomeAreEmpty() throws Exception {
+        checkLinesConsumedAsCommands(
+                Arrays.asList("::command 1::", "", "::command 2::", "", "", "::command 3::"),
+                Arrays.asList("::command 1::", "::command 2::", "::command 3::"));
+    }
+
+    private void checkLinesConsumedAsCommands(List<String> lines, List<String> expectedCommands) throws IOException {
         consumeText(
                 command -> this.commandsReceived.add(command),
                 new StringReader(unlines(lines)));
 
-        Assertions.assertEquals(lines, commandsReceived, "Wrong commands received.");
+        Assertions.assertEquals(expectedCommands, commandsReceived, "Wrong commands received.");
     }
 
     private void consumeText(Consumer<String> handleCommand, Reader commandSource) throws IOException {
-        new BufferedReader(commandSource).lines().forEach(handleCommand::accept);
+        new BufferedReader(commandSource).lines()
+                .filter(line -> !line.isEmpty())
+                .forEach(handleCommand::accept);
     }
 
     // REFACTOR Move to a generic text-processing library
