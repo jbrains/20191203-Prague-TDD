@@ -7,8 +7,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.nio.Buffer;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -28,8 +28,17 @@ public class ConsumeTextCommandsTest {
         Assertions.assertEquals(true, commandReceived, "Command not received.");
     }
 
+    @Test
+    void noCommands() throws Exception {
+        consumeText(
+                command -> Assertions.fail(String.format("Unexpected command received: [%s].", command)),
+                new StringReader(unlines(Collections.emptyList())));
+    }
+
     private void consumeText(Consumer<String> handleCommand, Reader commandSource) throws IOException {
-        handleCommand.accept(new BufferedReader(commandSource).readLine());
+        final String line = new BufferedReader(commandSource).readLine();
+        if (line != null)
+            handleCommand.accept(line);
     }
 
     // REFACTOR Move to a generic text-processing library
