@@ -12,8 +12,8 @@ public class FractionEqualsTest {
     }
 
     @Property(tries = 50000)
-    void shouldNotBeEqual(@ForAll("unequalPairsOfFractions") Tuple2<Fraction, Fraction> equalPairs) {
-        Assertions.assertNotEquals(equalPairs.get1(), equalPairs.get2());
+    void shouldNotBeEqual(@ForAll("unequalPairsOfFractions") Tuple2<Fraction, Fraction> unequalPairs) {
+        Assertions.assertNotEquals(unequalPairs.get1(), unequalPairs.get2());
     }
 
     @Provide
