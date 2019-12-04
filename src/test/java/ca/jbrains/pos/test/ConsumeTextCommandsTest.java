@@ -54,7 +54,7 @@ public class ConsumeTextCommandsTest {
 
     @Test
     void severalCommandsSomeHaveExtraWhitespace() throws Exception {
-        checkLinesConsumedAsCommands(
+        checkLinesCanonicalizedAs(
                 Arrays.asList("    ::command 1::   ", "   \t\t   \r   ", "::command 2::     ", "", "", "\t::command 3::\f"),
                 Arrays.asList("::command 1::", "::command 2::", "::command 3::"));
     }
