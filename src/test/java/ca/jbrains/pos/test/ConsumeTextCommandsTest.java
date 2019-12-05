@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class ConsumeTextCommandsTest {
     private List<String> commandsReceived = new ArrayList<>();
@@ -52,7 +51,7 @@ public class ConsumeTextCommandsTest {
         consumeText(
                 command -> this.commandsReceived.add(command),
                 rawLines -> rawLines,
-                new StreamLinesFromReader(new StringReader(unlines(lines))));
+                new StreamLinesFromReader(new StringReader(StreamLinesFromReaderTest.unlines(lines))));
 
         Assertions.assertEquals(expectedCommands, commandsReceived, "Wrong commands received.");
     }
@@ -60,10 +59,5 @@ public class ConsumeTextCommandsTest {
     private void consumeText(Consumer<String> handleCommand, CanonicalizeLines canonicalizeLines, final StreamLinesFromReader streamLinesFromReader) throws IOException {
         canonicalizeLines.canonicalizeLines(streamLinesFromReader.streamAsLines())
                 .forEach(handleCommand::accept);
-    }
-
-    // REFACTOR Move to a generic text-processing library
-    private static String unlines(List<String> lines) {
-        return lines.stream().collect(Collectors.joining(System.lineSeparator()));
     }
 }
