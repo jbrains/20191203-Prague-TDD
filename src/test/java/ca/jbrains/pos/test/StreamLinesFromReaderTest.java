@@ -14,6 +14,11 @@ public class StreamLinesFromReaderTest {
         assertLinesStreamedAs(Collections.emptyList(), "");
     }
 
+    @Test
+    void oneLine() throws Exception {
+        assertLinesStreamedAs(Collections.singletonList("::line 1::"), "::line 1::");
+    }
+
     private static void assertLinesStreamedAs(final List<Object> expectedLines, final String text) {
         final StreamLinesFromReader streamLinesFromReader = new StreamLinesFromReader(new StringReader(text));
         Assertions.assertEquals(
