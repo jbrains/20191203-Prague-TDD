@@ -1,5 +1,9 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.Catalog;
+import ca.jbrains.pos.Display;
+import ca.jbrains.pos.Price;
+import ca.jbrains.pos.SellOneItemController;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -40,26 +44,4 @@ public class SellOneItemControllerTest {
         Mockito.verify(display).displayScannedEmptyBarcodeMessage();
     }
 
-    public static class SellOneItemController {
-        private final Catalog catalog;
-        private final Display display;
-
-        public SellOneItemController(Catalog catalog, Display display) {
-            this.catalog = catalog;
-            this.display = display;
-        }
-
-        public void onBarcode(String barcode) {
-            if ("".equals(barcode)) {
-                display.displayScannedEmptyBarcodeMessage();
-                return;
-            }
-
-            final Price price = catalog.findPrice(barcode);
-            if (price == null)
-                display.displayProductNotFoundMessage(barcode);
-            else
-                display.displayPrice(price);
-        }
-    }
 }
