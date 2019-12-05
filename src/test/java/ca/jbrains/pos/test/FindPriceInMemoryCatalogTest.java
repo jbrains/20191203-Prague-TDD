@@ -25,8 +25,12 @@ public class FindPriceInMemoryCatalogTest {
 
     @Test
     void productNotFound() throws Exception {
-        final InMemoryCatalog catalog = new InMemoryCatalog(Collections.emptyMap());
+        final InMemoryCatalog catalog = createCatalogWithout("::barcode::");
         Assertions.assertEquals(null, catalog.findPrice("::barcode::"));
+    }
+
+    private InMemoryCatalog createCatalogWithout(String barcodeToAvoid) {
+        return new InMemoryCatalog(Collections.emptyMap());
     }
 
     public static class InMemoryCatalog {
