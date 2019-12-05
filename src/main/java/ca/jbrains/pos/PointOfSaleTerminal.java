@@ -14,6 +14,8 @@ public class PointOfSaleTerminal {
                 new ConsoleDisplay()
         );
 
+        // canonicalizeLines.canonicalizeLines(streamLines.streamAsLines()).forEach(handleCommand::accept)
+
         sellOneItemController.onBarcode("12345");
         sellOneItemController.onBarcode("23456");
         sellOneItemController.onBarcode("99999");
