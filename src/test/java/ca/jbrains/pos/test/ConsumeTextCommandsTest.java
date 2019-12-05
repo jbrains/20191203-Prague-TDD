@@ -4,9 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +41,7 @@ public class ConsumeTextCommandsTest {
     void canonicalizeLines() throws Exception {
         final CanonicalizeLines canonicalizeLines = Mockito.mock(CanonicalizeLines.class);
 
-        consumeText(ignored -> {}, new StringReader("::anything not empty::"), canonicalizeLines);
+        consumeText(ignored -> {}, canonicalizeLines, new StreamLinesFromReader(new StringReader("::anything not empty::")));
 
         // Just try to canonicalize the lines!
         // SMELL This expectation seems silly!
@@ -53,14 +51,14 @@ public class ConsumeTextCommandsTest {
     private void checkLinesConsumedAsCommands(List<String> lines, List<String> expectedCommands) throws IOException {
         consumeText(
                 command -> this.commandsReceived.add(command),
-                new StringReader(unlines(lines)),
-                rawLines -> rawLines);
+                rawLines -> rawLines,
+                new StreamLinesFromReader(new StringReader(unlines(lines))));
 
         Assertions.assertEquals(expectedCommands, commandsReceived, "Wrong commands received.");
     }
 
-    private void consumeText(Consumer<String> handleCommand, Reader commandSource, CanonicalizeLines canonicalizeLines) throws IOException {
-        canonicalizeLines.canonicalizeLines(new BufferedReader(commandSource).lines())
+    private void consumeText(Consumer<String> handleCommand, CanonicalizeLines canonicalizeLines, final StreamLinesFromReader streamLinesFromReader) throws IOException {
+        canonicalizeLines.canonicalizeLines(streamLinesFromReader.streamAsLines())
                 .forEach(handleCommand::accept);
     }
 
