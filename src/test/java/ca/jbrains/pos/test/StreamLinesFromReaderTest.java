@@ -15,8 +15,13 @@ public class StreamLinesFromReaderTest {
     }
 
     @Test
-    void oneLine() throws Exception {
+    void trainingLineTerminatorNotNeeded() throws Exception {
         assertLinesStreamedAs(Collections.singletonList("::line 1::"), "::line 1::");
+    }
+
+    @Test
+    void ignoresTrailingLineTerminator() throws Exception {
+        assertLinesStreamedAs(Collections.singletonList("::line 1::"), "::line 1::" + System.lineSeparator());
     }
 
     private static void assertLinesStreamedAs(final List<Object> expectedLines, final String text) {
