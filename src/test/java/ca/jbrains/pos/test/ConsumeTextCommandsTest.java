@@ -51,14 +51,10 @@ public class ConsumeTextCommandsTest {
     }
 
     private void checkLinesConsumedAsCommands(List<String> lines, List<String> expectedCommands) throws IOException {
-        final CanonicalizeLines canonicalizeLines = Mockito.mock(CanonicalizeLines.class);
-        // SMELL A very complicated way to say "don't change the incoming lines".
-        Mockito.when(canonicalizeLines.canonicalizeLines(Mockito.any())).thenReturn(lines.stream());
-
         consumeText(
                 command -> this.commandsReceived.add(command),
                 new StringReader(unlines(lines)),
-                canonicalizeLines);
+                rawLines -> rawLines);
 
         Assertions.assertEquals(expectedCommands, commandsReceived, "Wrong commands received.");
     }
