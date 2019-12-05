@@ -37,17 +37,6 @@ public class ConsumeTextCommandsTest {
                 Arrays.asList("::command 1::", "::command 2::", "::command 3::"));
     }
 
-    @Test
-    void canonicalizeLines() throws Exception {
-        final CanonicalizeLines canonicalizeLines = Mockito.mock(CanonicalizeLines.class);
-
-        consumeText(new StreamLinesFromReader(new StringReader("::anything not empty::")), canonicalizeLines, ignored -> {});
-
-        // Just try to canonicalize the lines!
-        // SMELL This expectation seems silly!
-        Mockito.verify(canonicalizeLines).canonicalizeLines(Mockito.any());
-    }
-
     private void checkLinesConsumedAsCommands(List<String> lines, List<String> expectedCommands) {
         consumeText(
                 new StreamLinesFromReader(new StringReader(StreamLinesFromReaderTest.unlines(lines))), rawLines -> rawLines, command -> this.commandsReceived.add(command)
