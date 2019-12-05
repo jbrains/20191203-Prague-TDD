@@ -10,19 +10,6 @@ public class FindPriceInMemoryCatalogTest {
     @Test
     void productFound() throws Exception {
         final Price matchingPrice = Price.cents(9214);
-        final InMemoryCatalog catalog = new InMemoryCatalog(Collections.singletonMap("::barcode::", matchingPrice));
-        Assertions.assertEquals(matchingPrice, catalog.findPrice("::barcode::"));
-    }
-
-    @Test
-    void productNotFound() throws Exception {
-        final InMemoryCatalog catalog = new InMemoryCatalog(Collections.emptyMap());
-        Assertions.assertEquals(null, catalog.findPrice("::barcode::"));
-    }
-
-    @Test
-    void productFoundAmongMany() throws Exception {
-        final Price matchingPrice = Price.cents(9214);
         final InMemoryCatalog catalog = new InMemoryCatalog(new HashMap<>() {{
             put("something other than ::barcode::", Price.cents(-1));
             put("::barcode::", matchingPrice);
@@ -30,6 +17,12 @@ public class FindPriceInMemoryCatalogTest {
             put("not ::barcode::", Price.cents(-3));
         }});
         Assertions.assertEquals(matchingPrice, catalog.findPrice("::barcode::"));
+    }
+
+    @Test
+    void productNotFound() throws Exception {
+        final InMemoryCatalog catalog = new InMemoryCatalog(Collections.emptyMap());
+        Assertions.assertEquals(null, catalog.findPrice("::barcode::"));
     }
 
     public static class InMemoryCatalog {
