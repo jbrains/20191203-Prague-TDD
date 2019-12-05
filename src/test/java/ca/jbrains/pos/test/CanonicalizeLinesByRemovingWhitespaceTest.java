@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.CanonicalizeLinesByRemovingWhitespace;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

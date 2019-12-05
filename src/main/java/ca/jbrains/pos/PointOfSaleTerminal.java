@@ -1,5 +1,6 @@
 package ca.jbrains.pos;
 
+import java.io.InputStreamReader;
 import java.util.HashMap;
 
 public class PointOfSaleTerminal {
@@ -14,11 +15,8 @@ public class PointOfSaleTerminal {
                 new ConsoleDisplay()
         );
 
-        // canonicalizeLines.canonicalizeLines(streamLines.streamAsLines()).forEach(handleCommand::accept)
-
-        sellOneItemController.onBarcode("12345");
-        sellOneItemController.onBarcode("23456");
-        sellOneItemController.onBarcode("99999");
-        sellOneItemController.onBarcode("");
+        new CanonicalizeLinesByRemovingWhitespace().canonicalizeLines(
+                new StreamLinesFromReader(new InputStreamReader(System.in)).streamAsLines()
+        ).forEach(sellOneItemController::onBarcode);
     }
 }
