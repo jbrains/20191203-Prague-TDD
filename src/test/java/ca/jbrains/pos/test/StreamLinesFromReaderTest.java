@@ -53,7 +53,7 @@ public class StreamLinesFromReaderTest {
                 unlines(nEmptyLines(5)) + System.lineSeparator());
     }
 
-    private List<String> nEmptyLines(final int n) {
+    private static List<String> nEmptyLines(final int n) {
         return Collections.nCopies(n, "");
     }
 
