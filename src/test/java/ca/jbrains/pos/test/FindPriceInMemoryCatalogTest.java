@@ -30,7 +30,11 @@ public class FindPriceInMemoryCatalogTest {
     }
 
     private InMemoryCatalog createCatalogWithout(String barcodeToAvoid) {
-        return new InMemoryCatalog(Collections.emptyMap());
+        return new InMemoryCatalog(new HashMap<>() {{
+            put(String.format("something other than %s", barcodeToAvoid), Price.cents(-1));
+            put(String.format("%s is not this thing", barcodeToAvoid), Price.cents(-2));
+            put(String.format("not %s", barcodeToAvoid), Price.cents(-3));
+        }});
     }
 
     public static class InMemoryCatalog {
