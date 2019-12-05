@@ -14,6 +14,12 @@ public class FindPriceInMemoryCatalogTest {
         Assertions.assertEquals(matchingPrice, catalog.findPrice("::barcode::"));
     }
 
+    @Test
+    void productNotFound() throws Exception {
+        final InMemoryCatalog catalog = new InMemoryCatalog(Collections.emptyMap());
+        Assertions.assertEquals(null, catalog.findPrice("::barcode::"));
+    }
+
     public static class InMemoryCatalog {
         private final Map<String, Price> pricesByBarcode;
 
