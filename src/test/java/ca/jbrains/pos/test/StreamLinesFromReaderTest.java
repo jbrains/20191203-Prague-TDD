@@ -16,13 +16,8 @@ public class StreamLinesFromReaderTest {
     }
 
     @Test
-    void trainingLineTerminatorNotNeeded() throws Exception {
+    void oneLine() throws Exception {
         assertLinesStreamedAs(Collections.singletonList("::line 1::"), "::line 1::");
-    }
-
-    @Test
-    void ignoresTrailingLineTerminator() throws Exception {
-        assertLinesStreamedAs(Collections.singletonList("::line 1::"), "::line 1::" + System.lineSeparator());
     }
 
     @Test
@@ -30,6 +25,13 @@ public class StreamLinesFromReaderTest {
         assertLinesStreamedAs(
                 Arrays.asList("::line 1::", "::line 2::", "::line 3::"),
                 unlines(Arrays.asList("::line 1::", "::line 2::", "::line 3::")));
+    }
+
+    @Test
+    void ignoresTrailingLineTerminator() throws Exception {
+        assertLinesStreamedAs(
+                Arrays.asList("::line 1::", "::line 2::", "::line 3::"),
+                unlines(Arrays.asList("::line 1::", "::line 2::", "::line 3::")) + System.lineSeparator());
     }
 
     // REFACTOR Move to a generic text-processing library
