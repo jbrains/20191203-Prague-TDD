@@ -48,7 +48,7 @@ public class ConsumeTextCommandsTest {
         Mockito.verify(canonicalizeLines).canonicalizeLines(Mockito.any());
     }
 
-    private void checkLinesConsumedAsCommands(List<String> lines, List<String> expectedCommands) throws IOException {
+    private void checkLinesConsumedAsCommands(List<String> lines, List<String> expectedCommands) {
         consumeText(
                 new StreamLinesFromReader(new StringReader(StreamLinesFromReaderTest.unlines(lines))), rawLines -> rawLines, command -> this.commandsReceived.add(command)
         );
@@ -56,11 +56,11 @@ public class ConsumeTextCommandsTest {
         Assertions.assertEquals(expectedCommands, commandsReceived, "Wrong commands received.");
     }
 
-    private void consumeText(final StreamLinesFromReader streamLinesFromReader, CanonicalizeLines canonicalizeLines, Consumer<String> handleCommand) throws IOException {
+    private void consumeText(final StreamLines streamLines, CanonicalizeLines canonicalizeLines, Consumer<String> handleCommand) {
         dispatchCommands(
                 handleCommand,
                 canonicalizeLines.canonicalizeLines(
-                        streamLinesFromReader.streamAsLines()));
+                        streamLines.streamAsLines()));
     }
 
     private void dispatchCommands(Consumer<String> handleCommand, Stream<String> canonicalLines) {
