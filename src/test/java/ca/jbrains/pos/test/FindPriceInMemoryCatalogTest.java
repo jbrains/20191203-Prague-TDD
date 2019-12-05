@@ -3,7 +3,6 @@ package ca.jbrains.pos.test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.HashMap;
-import java.util.Collections;
 import java.util.Map;
 
 public class FindPriceInMemoryCatalogTest {
@@ -37,7 +36,7 @@ public class FindPriceInMemoryCatalogTest {
         }});
     }
 
-    public static class InMemoryCatalog {
+    public static class InMemoryCatalog implements Catalog {
         private final Map<String, Price> pricesByBarcode;
 
         public InMemoryCatalog(Map<String, Price> pricesByBarcode) {
