@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class ConsumeTextCommandsTest {
     private List<String> commandsReceived = new ArrayList<>();
@@ -40,7 +41,7 @@ public class ConsumeTextCommandsTest {
     void canonicalizeLines() throws Exception {
         final CanonicalizeLines canonicalizeLines = Mockito.mock(CanonicalizeLines.class);
 
-        consumeText(ignored -> {}, canonicalizeLines, new StreamLinesFromReader(new StringReader("::anything not empty::")));
+        consumeText(new StreamLinesFromReader(new StringReader("::anything not empty::")), canonicalizeLines, ignored -> {});
 
         // Just try to canonicalize the lines!
         // SMELL This expectation seems silly!
@@ -49,15 +50,20 @@ public class ConsumeTextCommandsTest {
 
     private void checkLinesConsumedAsCommands(List<String> lines, List<String> expectedCommands) throws IOException {
         consumeText(
-                command -> this.commandsReceived.add(command),
-                rawLines -> rawLines,
-                new StreamLinesFromReader(new StringReader(StreamLinesFromReaderTest.unlines(lines))));
+                new StreamLinesFromReader(new StringReader(StreamLinesFromReaderTest.unlines(lines))), rawLines -> rawLines, command -> this.commandsReceived.add(command)
+        );
 
         Assertions.assertEquals(expectedCommands, commandsReceived, "Wrong commands received.");
     }
 
-    private void consumeText(Consumer<String> handleCommand, CanonicalizeLines canonicalizeLines, final StreamLinesFromReader streamLinesFromReader) throws IOException {
-        canonicalizeLines.canonicalizeLines(streamLinesFromReader.streamAsLines())
-                .forEach(handleCommand::accept);
+    private void consumeText(final StreamLinesFromReader streamLinesFromReader, CanonicalizeLines canonicalizeLines, Consumer<String> handleCommand) throws IOException {
+        dispatchCommands(
+                handleCommand,
+                canonicalizeLines.canonicalizeLines(
+                        streamLinesFromReader.streamAsLines()));
+    }
+
+    private void dispatchCommands(Consumer<String> handleCommand, Stream<String> canonicalLines) {
+        canonicalLines.forEach(handleCommand::accept);
     }
 }
